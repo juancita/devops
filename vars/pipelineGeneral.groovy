@@ -1,4 +1,5 @@
-@Library('devops') _
+import org.devops.lb_analisissonarqube
+import org.devops.lb_buildartefacto
 
 def call() {
     pipeline {
