@@ -11,3 +11,9 @@ def install() {
     // Ejecuta el comando npm install para instalar las dependencias del proyecto
     sh 'npm install'
 }
+
+// Construye el proyecto
+def build() {
+    // Ejecuta el comando de construcción
+    sh 'npm run build'
+}

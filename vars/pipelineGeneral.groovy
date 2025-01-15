@@ -1,35 +1,32 @@
-// pipelineGeneral.groovy
 def call() {
-    // Definir el agente de ejecución para el pipeline
     pipeline {
         agent any
 
-        // Herramientas necesarias
         tools {
-            nodejs 'NodeJS' // Asegúrate de que NodeJS esté configurado en Jenkins
+            nodejs 'NodeJS' // Asegúrate de configurar NodeJS en Jenkins
         }
 
         environment {
-            // Definir las variables de entorno
-            nameBranch = "main" // Puedes personalizar la rama aquí
-            UrlGitHub = "https://github.com/juancita/to-do-list" // Cambia la URL según sea necesario
+            nameBranch = "main"
+            UrlGitHub = "https://github.com/juancita/to-do-list"
         }
 
         stages {
             stage('Clonar y Construir') {
                 steps {
                     script {
-                        // Invocar la librería para clonar y construir el proyecto
-                        org.devops.lb_buildartefacto.cloneAndBuild()
+                        org.devops.lb_buildartefacto.clone()
+                        org.devops.lb_buildartefacto.install()
+                        org.devops.lb_buildartefacto.build()
                     }
                 }
             }
 
-            stage('Análisis SonarQube') {
+            stage('Pruebas y Análisis SonarQube') {
                 steps {
                     script {
-                        // Invocar la librería para realizar el análisis en SonarQube
-                        org.devops.lb_analisissonarqube.analyzeSonarQube()
+                        org.devops.lb_analisissonarqube.testCoverage()
+                        org.devops.lb_analisissonarqube.analisisSonar(env.nameBranch)
                     }
                 }
             }
@@ -37,11 +34,9 @@ def call() {
 
         post {
             always {
-                // Limpieza o acciones que siempre se ejecutan después de las etapas
                 echo 'Pipeline ejecutado con éxito.'
             }
             failure {
-                // Acciones si el pipeline falla
                 echo 'Hubo un fallo en la ejecución del pipeline.'
             }
         }

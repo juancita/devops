@@ -2,7 +2,7 @@ package org.devops
 
 def testCoverage() {
     // Ejecuta las pruebas con npm
-    sh 'npm test'
+    sh 'npm test -- --coverage' // Ejecuta las pruebas generando cobertura
 }
 
 def analisisSonar(gitName) {
@@ -15,11 +15,11 @@ def analisisSonar(gitName) {
         withSonarQubeEnv("sonar-scanner") {
             sh """
             ${scannerHome}/bin/sonar-scanner \
-            -Dsonar.projectkey=${gitName} \
+            -Dsonar.projectKey=${gitName} \
             -Dsonar.projectName=${gitName} \
-            -Dsonar.sources=\$(env.source) \
+            -Dsonar.sources=src \
             -Dsonar.tests=src/_test_ \
-            -Dsonar.exclusions='**/*.test.js' \
+            -Dsonar.exclusions=**/*.test.js \
             -Dsonar.testExecutionReportPaths=./test-report.xml \
             -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
             """
