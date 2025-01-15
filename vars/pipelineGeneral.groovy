@@ -12,7 +12,7 @@ def call() {
         environment {
             // Definir las variables de entorno
             nameBranch = "main" // Puedes personalizar la rama aquí
-            UrlGitHub = "https://github.com/tu_usuario/tu_repositorio.git" // Cambia la URL según sea necesario
+            UrlGitHub = "https://github.com/juancita/to-do-list" // Cambia la URL según sea necesario
         }
 
         stages {
