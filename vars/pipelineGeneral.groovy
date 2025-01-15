@@ -15,9 +15,9 @@ def call() {
             stage('Clonar y Construir') {
                 steps {
                     script {
-                        org.devops.lb_buildartefacto.clone()
-                        org.devops.lb_buildartefacto.install()
-                        org.devops.lb_buildartefacto.build()
+                        lb_buildartefacto.clone()
+                        lb_buildartefacto.install()
+                        lb_buildartefacto.build()
                     }
                 }
             }
@@ -25,8 +25,8 @@ def call() {
             stage('Pruebas y Análisis SonarQube') {
                 steps {
                     script {
-                        org.devops.lb_analisissonarqube.testCoverage()
-                        org.devops.lb_analisissonarqube.analisisSonar(env.nameBranch)
+                        lb_analisissonarqube.testCoverage()
+                        lb_analisissonarqube.analisisSonar(env.nameBranch)
                     }
                 }
             }
