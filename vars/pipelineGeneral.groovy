@@ -1,3 +1,5 @@
+@Library('devops') _
+
 def call() {
     pipeline {
         agent any
