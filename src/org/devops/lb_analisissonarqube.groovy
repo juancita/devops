@@ -13,8 +13,7 @@ def analisisSonar(gitName) {
     if (scannerHome) { 
         // Ejecuta el análisis con el sonar-scanner
         withSonarQubeEnv("sonar-scanner") {
-            sh """
-            ${scannerHome}/bin/sonar-scanner \
+            sh "${scannerHome}/bin/sonar-scanner \
             -Dsonar.projectKey=${gitName} \
             -Dsonar.projectName=${gitName} \
             -Dsonar.sources=src \
@@ -22,7 +21,7 @@ def analisisSonar(gitName) {
             -Dsonar.exclusions=**/*.test.js \
             -Dsonar.testExecutionReportPaths=./test-report.xml \
             -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
-            """
+            "
         }
     } else {
         error 'SonarQube Scanner not found'

@@ -1,7 +1,7 @@
 import org.devops.lb_analisissonarqube
 import org.devops.lb_buildartefacto
 
-def call() {
+def call(Map config) {
     def lb_buildartefacto = new lb_buildartefacto()
     def lb_analisissonarqube = new lb_analisissonarqube()
     pipeline {
