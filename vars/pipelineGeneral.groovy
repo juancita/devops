@@ -1,11 +1,11 @@
 import org.devops.lb_analisissonarqube
 import org.devops.lb_buildartefacto
 
-def call(Map config) {
-    def lb_buildartefacto = new lb_buildartefacto()
-    def lb_analisissonarqube = new lb_analisissonarqube()
-    pipeline {
+def call(Map config = [:]) {
+    def buildArtefacto = new lb_buildartefacto()
+    def analisisSonar = new lb_analisissonarqube()
 
+    pipeline {
         agent any
 
         tools {
@@ -21,9 +21,10 @@ def call(Map config) {
             stage('Clonar y Construir') {
                 steps {
                     script {
-                        org.devops.lb_buildartefacto.clone()
-                        org.devops.lb_buildartefacto.install()
-                        org.devops.lb_buildartefacto.build()
+                        // Llamar a los métodos de la instancia buildArtefacto
+                        buildArtefacto.clone()
+                        buildArtefacto.install()
+                        buildArtefacto.build()
                     }
                 }
             }
@@ -31,8 +32,9 @@ def call(Map config) {
             stage('Pruebas y Análisis SonarQube') {
                 steps {
                     script {
-                        org.devops.lb_analisissonarqube.testCoverage()
-                        org.devops.lb_analisissonarqube.analisisSonar(env.nameBranch)
+                        // Llamar a los métodos de la instancia analisisSonar
+                        analisisSonar.testCoverage()
+                        analisisSonar.analisisSonar(env.nameBranch)
                     }
                 }
             }
