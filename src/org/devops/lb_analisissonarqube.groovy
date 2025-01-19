@@ -2,7 +2,9 @@ package org.devops
 
 def testCoverage() {
     // Ejecuta las pruebas con npm
-    sh 'npm test -- --coverage' // Ejecuta las pruebas generando cobertura
+    sh 'npm test' 
+    sh 'npm install'
+    sh 'npm run build'
 }
 
 def analisisSonar(gitName) {

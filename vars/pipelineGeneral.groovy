@@ -8,7 +8,7 @@ def call() {
 
         environment {
             nameBranch = "main"
-            UrlGitHub = "https://github.com/juancita/to-do-list"
+            UrlGitHub = "https://github.com/juancita/RetoJenkinsFuncional"
         }
 
         stages {
@@ -16,8 +16,7 @@ def call() {
                 steps {
                     script {
                         org.devops.lb_buildartefacto.clone()
-                        org.devops.lb_buildartefacto.install()
-                        org.devops.lb_buildartefacto.build()
+
                     }
                 }
             }
