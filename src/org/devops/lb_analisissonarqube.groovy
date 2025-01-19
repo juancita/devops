@@ -25,7 +25,7 @@ def analisisSonar(gitName) {
                 -Dsonar.projectKey=${gitName} \
                 -Dsonar.projectName=${gitName} \
                 -Dsonar.sources=src \
-                -Dsonar.tests=src/__test__ \
+                -Dsonar.tests=src/tests \
                 -Dsonar.exclusions=**/*.test.js \
                 -Dsonar.testExecutionReportPaths=./test-report.xml \
                 -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
