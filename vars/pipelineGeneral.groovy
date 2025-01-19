@@ -14,7 +14,7 @@ def call(Map config = [:]) {
 
         environment {
             nameBranch = "main"
-            UrlGitHub = "https://github.com/juancita/to-do-list"
+            UrlGitHub = "https://github.com/juancita/RetoJenkinsFuncional"
         }
 
         stages {
