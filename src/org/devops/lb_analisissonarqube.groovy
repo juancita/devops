@@ -5,6 +5,11 @@ def testCoverage() {
     sh 'npm install'
     sh 'npm run build'
     sh 'npm test'
+
+    // Verifica si el archivo de cobertura fue generado
+    if (!fileExists('coverage/lcov.info')) {
+        error 'Coverage report not generated. Ensure your tests are properly configured.'
+    }
 }
 
 def analisisSonar(gitName) {
@@ -27,6 +32,6 @@ def analisisSonar(gitName) {
             """
         }
     } else {
-        error 'SonarQube Scanner not found'
+        error 'SonarQube Scanner not found. Ensure it is properly configured in Jenkins.'
     }
 }
