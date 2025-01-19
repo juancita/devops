@@ -9,7 +9,7 @@ def call(Map config = [:]) {
         agent any
 
         tools {
-            nodejs 'NodeJS' // Asegúrate de configurar NodeJS en Jenkins
+            nodejs 'NodeJS' 
         }
 
         environment {
@@ -23,8 +23,6 @@ def call(Map config = [:]) {
                     script {
                         // Llamar a los métodos de la instancia buildArtefacto
                         buildArtefacto.clone()
-                        buildArtefacto.install()
-                        buildArtefacto.build()
                     }
                 }
             }
