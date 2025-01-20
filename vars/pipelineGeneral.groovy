@@ -1,11 +1,24 @@
-def call(Map params = [:]) {
+import org.devops.lb_buildimagen
+import org.devops.lb_deploydocker
+import org.devops.lb_owasp
+import org.devops.lb_publicardockerhub
+
+
+
+def call(Map config = [:]) {
+
+    def lb_buildimagen = new lb_buildimagen()
+    def lb_deploydocker = new lb_deploydocker()
+    def lb_owasp = new lb_owasp()
+    def lb_publicardockerhub = new lb_publicardockerhub()
+    
     pipeline {
         agent any
         tools {
             nodejs 'NodeJS'
         }
         environment {
-            projectName = "${params.UrlGitHub.tokenize('/')[-1].split('\\.')[0]}"
+            env.projectName = "https://github.com/juancita/RetoJenkinsFuncional"
         }
         stages {
             stage('Build Docker Image') {
