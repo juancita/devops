@@ -20,7 +20,7 @@ def call(Map config = [:]) {
                     script {
                         def urlGitHub = sh(script: 'git config --get remote.origin.url', returnStdout: true).trim()
                         echo "URL del repositorio Git: ${urlGitHub}" 
-                        def projectGitName = urlGitHub.replaceAll(/^.*\/([^/]+)\.git$/, '$1') 
+                        def projectGitName = urlGitHub.replaceAll(/^.*\/([^\/]+)\.git$/, '$1') 
                         echo "Nombre del proyecto extraído: ${projectGitName}" 
                         env.projectGitName = projectGitName
                     } 
