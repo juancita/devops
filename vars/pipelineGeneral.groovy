@@ -3,8 +3,6 @@ import org.devops.lb_deploydocker
 import org.devops.lb_owasp
 import org.devops.lb_publicardockerhub
 
-
-
 def call(Map config = [:]) {
 
     def lb_buildimagen = new lb_buildimagen()
@@ -16,40 +14,53 @@ def call(Map config = [:]) {
         agent any
         tools {
             nodejs 'NodeJS'
-        }
-        environment {
-            env.projectName = "https://github.com/juancita/RetoJenkinsFuncional"
-        }
+        } 
         stages {
+            stage('Extract Project Name') {
+                 steps { 
+                    script {
+                        def urlGitHub = sh(script: 'git config --get remote.origin.url', returnStdout: true).trim()
+                        echo "URL del repositorio Git: ${urlGitHub}" 
+                        def projectGitName = urlGitHub.replaceAll(/^.*\/([^/]+)\.git$/, '$1') 
+                        echo "Nombre del proyecto extraído: ${projectGitName}" 
+                        env.projectGitName = projectGitName
+                    } 
+                }
+            } 
+            
             stage('Build Docker Image') {
                 steps {
                     script {
-                        org.devops.lb_buildimagen.buildImageDocker(env.projectName)
+                        lb_buildimagen.buildImageDocker(env.projectGitName)
                     }
                 }
             }
+            
             stage('Publish Docker Image') {
                 steps {
                     script {
-                        org.devops.lb_publicardockerhub.publicarImagen(env.projectName)
+                        lb_publicardockerhub.publicarImagen(env.projectGitName)
                     }
                 }
             }
+            
             stage('Deploy Docker Container') {
                 steps {
                     script {
-                        org.develop.lb_deploydocker.despliegueContenedor(env.projectName)
+                        lb_deploydocker.despliegueContenedor(env.projectGitName)
                     }
                 }
             }
+            
             stage('OWASP Security Analysis') {
                 steps {
                     script {
-                        org.develop.lb_owasp.AnalisisOwasp(env.projectName)
+                        lb_owasp.AnalisisOwasp(env.projectGitName)
                     }
                 }
             }
         }
+        
         post {
             always {
                 echo "Pipeline execution completed."
