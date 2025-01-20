@@ -23,28 +23,28 @@ def call(Map config = [:]) {
             stage('Build Docker Image') {
                 steps {
                     script {
-                        org.devops.lb_buildimagen.buildImageDocker(env.projectGitName)
+                        lb_buildimagen.buildImageDocker(env.projectGitName)
                     }
                 }
             }
             stage('Publish Docker Image') {
                 steps {
                     script {
-                        org.devops.lb_publicardockerhub.publicarImagen(env.projectGitName)
+                        lb_publicardockerhub.publicarImagen(env.projectGitName)
                     }
                 }
             }
             stage('Deploy Docker Container') {
                 steps {
                     script {
-                        org.devops.lb_deploydocker.despliegueContenedor(env.projectGitName)
+                        lb_deploydocker.despliegueContenedor(env.projectGitName)
                     }
                 }
             }
             stage('OWASP Security Analysis') {
                 steps {
                     script {
-                        org.devops.lb_owasp.AnalisisOwasp(env.projectGitName)
+                        lb_owasp.AnalisisOwasp(env.projectGitName)
                     }
                 }
             }
