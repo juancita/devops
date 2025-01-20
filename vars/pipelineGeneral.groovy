@@ -1,42 +1,51 @@
-def call() {
+def call(Map params = [:]) {
     pipeline {
         agent any
-
         tools {
-            nodejs 'NodeJS' // Asegúrate de configurar NodeJS en Jenkins
+            nodejs 'NodeJS'
         }
-
         environment {
-            nameBranch = "main"
-            UrlGitHub = "https://github.com/juancita/RetoJenkinsFuncional"
+            projectName = "${params.UrlGitHub.tokenize('/')[-1].split('\\.')[0]}"
         }
-
         stages {
-            stage('Clonar y Construir') {
+            stage('Build Docker Image') {
                 steps {
                     script {
-                        org.devops.lb_buildartefacto.clone()
-
+                        org.devops.lb_buildimagen.buildImageDocker(env.projectName)
                     }
                 }
             }
-
-            stage('Pruebas y Análisis SonarQube') {
+            stage('Publish Docker Image') {
                 steps {
                     script {
-                        org.devops.lb_analisissonarqube.testCoverage()
-                        org.devops.lb_analisissonarqube.analisisSonar(env.nameBranch)
+                        org.devops.lb_publicardockerhub.publicarImagen(env.projectName)
+                    }
+                }
+            }
+            stage('Deploy Docker Container') {
+                steps {
+                    script {
+                        org.develop.lb_deploydocker.despliegueContenedor(env.projectName)
+                    }
+                }
+            }
+            stage('OWASP Security Analysis') {
+                steps {
+                    script {
+                        org.develop.lb_owasp.AnalisisOwasp(env.projectName)
                     }
                 }
             }
         }
-
         post {
             always {
-                echo 'Pipeline ejecutado con éxito.'
+                echo "Pipeline execution completed."
+            }
+            success {
+                echo "Pipeline executed successfully."
             }
             failure {
-                echo 'Hubo un fallo en la ejecución del pipeline.'
+                echo "Pipeline failed. Please check the logs."
             }
         }
     }
