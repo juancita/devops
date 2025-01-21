@@ -1,52 +1,64 @@
-def call(Map params = [:]) {
-    pipeline {
+def call(){
+
+    pipeline{
+
         agent any
-        tools {
+
+        tools{
             nodejs 'NodeJS'
         }
-        environment {
-            projectName = 'RetoJenkinsFuncional' // Nombre directo del proyecto
+        
+        environment{
+            projectName = "${env.UrlGitHub}".replaceAll('.+/(.+)\\.git', '$1')toLowerCase()
+        } 
+
+       /* triggers{
+            pollSCM('* * * * * 1-5')
+        } */
+        
+
+        stages{
+
+            stage('Fase 2: Construcción de imagen en Docker Desktop') {
+                steps {
+                    script {
+                        def buildimage = new org.devops.lb_buildimagen()
+                        buildimage.buildImageDocker("${projectName}")
+                    }
+                }
+            }
+
+            stage('Fase 2: publicar imagen a docker hub.') {
+                steps {
+                    script {
+                        def publicImage = new org.devops.lb_publicardockerhub()
+                        publicImage.publicarImage("${projectName}")
+                    }
+                    
+                } 
+            }
+
+            stage('Fase 2: Desplegar imagen en docker') {
+                steps {
+                    script{
+                            def deployImg = new org.devops.lb_deploydocker()
+                            deployImg.despliegueContenedor("${projectName}")
+                        }
+                    }    
+                }                                        
+
+           stage('Fase 2: analisis con owasp') {
+                steps {
+                    script{
+                        def owasp = new org.devops.lb_owasp()
+                        owasp.AnalisisOwasp("${projectName}")
+                    }
+                }
+
         }
-        stages {
-            stage('Build Docker Image') {
-                steps {
-                    script {
-                        lb_buildimagen.buildImageDocker(env.projectName)
-                    }
-                }
-            }
-            stage('Publish Docker Image') {
-                steps {
-                    script {
-                        lb_publicardockerhub.publicarImagen(env.projectName)
-                    }
-                }
-            }
-            stage('Deploy Docker Container') {
-                steps {
-                    script {
-                        lb_deploydocker.despliegueContenedor(env.projectName)
-                    }
-                }
-            }
-            stage('OWASP Security Analysis') {
-                steps {
-                    script {
-                        lb_owasp.AnalisisOwasp(env.projectName)
-                    }
-                }
-            }
-        }
-        post {
-            always {
-                echo "Pipeline execution completed."
-            }
-            success {
-                echo "Pipeline executed successfully."
-            }
-            failure {
-                echo "Pipeline failed. Please check the logs."
-            }
-        }
+    
+
     }
+    
+  }
 }
