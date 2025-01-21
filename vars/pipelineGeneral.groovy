@@ -12,11 +12,6 @@ def call(){
             projectName = "${env.UrlGitHub}".replaceAll('.+/(.+)\\.git', '$1')toLowerCase()
         } 
 
-       /* triggers{
-            pollSCM('* * * * * 1-5')
-        } */
-        
-
         stages{
 
             stage('Fase 2: Construcción de imagen en Docker Desktop') {
