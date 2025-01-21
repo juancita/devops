@@ -5,7 +5,7 @@ def call(Map params = [:]) {
             nodejs 'NodeJS'
         }
         environment {
-            projectName = "${params.UrlGitHub.tokenize('/')[-1].split('\\.')[0]}"
+            projectName = 'RetoJenkinsFuncional'
         }
         stages {
             stage('Build Docker Image') {
