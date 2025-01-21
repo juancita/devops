@@ -1,9 +1,9 @@
-package org.develop
+package org.devops
 
-def despliegueContenedor(projectGitName){
-    sh "docker pull juancita/RetoJenkinsFuncional"
+def despliegueContenedor(projectGitName) {
+    sh "docker pull juancita/${projectGitName}"
     sh """docker run -d --name ${projectGitName} \
     --network=${env.NameNetwork} -p 5174:5174 \
-    --usr root juancita/${projectGitName}
+    --user root juancita/${projectGitName}
     """
 }
