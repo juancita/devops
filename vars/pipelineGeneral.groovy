@@ -15,36 +15,34 @@ def call(Map config = [:]) {
             nodejs 'NodeJS'
         }
         environment {
-            projectGitName="https://github.com/juancita/RetoJenkinsFuncional"
-
+            projectName = "${params.UrlGitHub.tokenize('/')[-1].split('\\.')[0]}"
         }
         stages {
-
             stage('Build Docker Image') {
                 steps {
                     script {
-                        lb_buildimagen.buildImageDocker(env.projectGitName)
+                        org.devops.lb_buildimagen.buildImageDocker(env.projectName)
                     }
                 }
             }
             stage('Publish Docker Image') {
                 steps {
                     script {
-                        lb_publicardockerhub.publicarImagen(env.projectGitName)
+                        org.devops.lb_publicardockerhub.publicarImagen(env.projectName)
                     }
                 }
             }
             stage('Deploy Docker Container') {
                 steps {
                     script {
-                        lb_deploydocker.despliegueContenedor(env.projectGitName)
+                        org.develop.lb_deploydocker.despliegueContenedor(env.projectName)
                     }
                 }
             }
             stage('OWASP Security Analysis') {
                 steps {
                     script {
-                        lb_owasp.AnalisisOwasp(env.projectGitName)
+                        org.develop.lb_owasp.AnalisisOwasp(env.projectName)
                     }
                 }
             }
