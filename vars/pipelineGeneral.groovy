@@ -5,34 +5,34 @@ def call(Map params = [:]) {
             nodejs 'NodeJS'
         }
         environment {
-            projectName = 'RetoJenkinsFuncional'
+            projectName = 'RetoJenkinsFuncional' // Nombre directo del proyecto
         }
         stages {
             stage('Build Docker Image') {
                 steps {
                     script {
-                        org.devops.lb_buildimagen.buildImageDocker(env.projectName)
+                        lb_buildimagen.buildImageDocker(env.projectName)
                     }
                 }
             }
             stage('Publish Docker Image') {
                 steps {
                     script {
-                        org.devops.lb_publicardockerhub.publicarImagen(env.projectName)
+                        lb_publicardockerhub.publicarImagen(env.projectName)
                     }
                 }
             }
             stage('Deploy Docker Container') {
                 steps {
                     script {
-                        org.devops.lb_deploydocker.despliegueContenedor(env.projectName)
+                        lb_deploydocker.despliegueContenedor(env.projectName)
                     }
                 }
             }
             stage('OWASP Security Analysis') {
                 steps {
                     script {
-                        org.devops.lb_owasp.AnalisisOwasp(env.projectName)
+                        lb_owasp.AnalisisOwasp(env.projectName)
                     }
                 }
             }
